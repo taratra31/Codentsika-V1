@@ -13,7 +13,7 @@ export const showToast = (
       toast.error(title, { description });
       break;
     case "warning":
-      toast.toast(title, { description, type: "warning" });
+      toast.warning(title, { description });
       break;
     case "info":
       toast.info(title, { description });
