@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Code2, Globe2, User, LogOut, ChevronDown } from "lucide-react";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://codentsika-v1.onrender.com";
 
 interface User {
   id: number;
