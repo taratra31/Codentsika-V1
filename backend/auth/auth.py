@@ -18,7 +18,7 @@ load_dotenv()
 
 # ---------- CONFIGURATION ----------
 SECRET_KEY = config.SECRET_KEY
-FRONTEND_URL ="https://codentsika-v1.vercel.app" 
+FRONTEND_URL = "https://codentsikafront.andriamtaratra5.workers.dev"
 
 # Configuration MySQL depuis config.py
 MYSQL_CONFIG = config.MYSQL_CONFIG
@@ -428,7 +428,7 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://codentsika-v1.vercel.app",
+        "https://codentsikafront.andriamtaratra5.workers.dev" ,
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
