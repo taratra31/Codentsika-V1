@@ -8,7 +8,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     FRONTEND_URL = os.getenv(
         "FRONTEND_URL",
-        "https://codentsikafront.andriamtaratra5.workers.dev"
+        "https://codentsikav1.andriamtaratra5.workers.dev"
     )
     BACKEND_URL = os.getenv(
         "BACKEND_URL",
