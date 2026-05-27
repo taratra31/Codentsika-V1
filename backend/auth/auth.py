@@ -342,33 +342,27 @@ def init_database():
     print("✅ Database initialized successfully")
 
 def save_or_update_user(email: str, name: str, provider: str, provider_id: str = None, avatar_url: str = None):
-    """Sauvegarde ou met à jour l'utilisateur dans la base"""
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Vérifier si l'utilisateur existe déjà
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
 
     now = datetime.now()
+
     if user:
-      cursor.execute(
-        """
-        UPDATE users 
-        SET 
-            provider = %s,
-            provider_id = %s,
-            name = %s,
-            avatar_url = %s,
-            last_login = %s,
-            updated_at = %s
-        WHERE email = %s
-        """,
-        (provider, provider_id, name, avatar_url, now, now, email)
-    )
-    user_id = user['id']
+        cursor.execute("""
+            UPDATE users 
+            SET provider = %s,
+                provider_id = %s,
+                name = %s,
+                avatar_url = %s,
+                last_login = %s,
+                updated_at = %s
+            WHERE email = %s
+        """, (provider, provider_id, name, avatar_url, now, now, email))
+        user_id = user["id"]
     else:
-        # Créer nouvel utilisateur
         cursor.execute("""
             INSERT INTO users (email, name, provider, provider_id, avatar_url, last_login, created_at, updated_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
