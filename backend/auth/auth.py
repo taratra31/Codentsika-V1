@@ -428,8 +428,7 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://codentsika.andriamtaratra5.workers.dev",
-        "https://codentsikafront.andriamtaratra5.workers.dev",
+        "https://codentsika-v1.vercel.app",
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
