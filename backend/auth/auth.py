@@ -351,20 +351,22 @@ def save_or_update_user(email: str, name: str, provider: str, provider_id: str =
     user = cursor.fetchone()
 
     now = datetime.now()
-
-    if user:
-        # Vérifier si le provider est différent
-        if user['provider'] != provider:
-            cursor.close()
-            conn.close()
-            raise Exception(f"Email already registered with {user['provider']}")
-
-        # Mettre à jour last_login
-        cursor.execute(
-            "UPDATE users SET last_login = %s, updated_at = %s WHERE email = %s",
-            (now, now, email)
-        )
-        user_id = user['id']
+if user:
+    cursor.execute(
+        """
+        UPDATE users 
+        SET 
+            provider = %s,
+            provider_id = %s,
+            name = %s,
+            avatar_url = %s,
+            last_login = %s,
+            updated_at = %s
+        WHERE email = %s
+        """,
+        (provider, provider_id, name, avatar_url, now, now, email)
+    )
+    user_id = user['id']
     else:
         # Créer nouvel utilisateur
         cursor.execute("""
