@@ -4,7 +4,7 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
 import { AlertCircle, Lock, Mail } from "lucide-react";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://codentsikav1.andriamtaratra5.workers.dev/signin";
 
 export default function AdminLogin() {
     const [email, setEmail] = useState("");
