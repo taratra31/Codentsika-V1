@@ -18,7 +18,7 @@ load_dotenv()
 
 # ---------- CONFIGURATION ----------
 SECRET_KEY = config.SECRET_KEY
-FRONTEND_URL = "https://codentsika.andriamtaratra5.workers.dev"
+FRONTEND_URL ="https://codentsika-v1.vercel.app" 
 
 # Configuration MySQL depuis config.py
 MYSQL_CONFIG = config.MYSQL_CONFIG
