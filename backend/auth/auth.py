@@ -351,8 +351,8 @@ def save_or_update_user(email: str, name: str, provider: str, provider_id: str =
     user = cursor.fetchone()
 
     now = datetime.now()
-if user:
-    cursor.execute(
+    if user:
+      cursor.execute(
         """
         UPDATE users 
         SET 
