@@ -173,11 +173,11 @@ def init_database():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL UNIQUE,
-            name VARCHAR(255),
+            email VARCHAR(191) NOT NULL UNIQUE,
+            name VARCHAR(191),
             provider ENUM('google', 'github', 'email') NOT NULL,
-            provider_id VARCHAR(255),
-            password_hash VARCHAR(255) NULL,
+            provider_id VARCHAR(191),
+            password_hash VARCHAR(191) NULL,
             avatar_url TEXT,
             role ENUM('user', 'admin') DEFAULT 'user',
             plan VARCHAR(50) DEFAULT 'Gratuit',
@@ -205,7 +205,7 @@ def init_database():
         CREATE TABLE IF NOT EXISTS user_sessions (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            session_token VARCHAR(255) NOT NULL UNIQUE,
+            session_token VARCHAR(191) NOT NULL UNIQUE,
             ip_address VARCHAR(45),
             user_agent TEXT,
             expires_at DATETIME NOT NULL,
@@ -222,8 +222,8 @@ def init_database():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS password_resets (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
-            token VARCHAR(255) NOT NULL,
+            email VARCHAR(191) NOT NULL,
+            token VARCHAR(191) NOT NULL,
             expires_at DATETIME NOT NULL,
             used BOOLEAN DEFAULT FALSE,
             created_at DATETIME NULL,
@@ -240,7 +240,7 @@ def init_database():
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             api_key VARCHAR(64) NOT NULL UNIQUE,
-            name VARCHAR(255),
+            name VARCHAR(191),
             last_used DATETIME,
             expires_at DATETIME,
             is_active BOOLEAN DEFAULT TRUE,
@@ -257,7 +257,7 @@ def init_database():
         CREATE TABLE IF NOT EXISTS conversations (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            title VARCHAR(255) NOT NULL,
+            title VARCHAR(191) NOT NULL,
             created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -286,8 +286,8 @@ def init_database():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS mock_apis (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            path VARCHAR(255) NOT NULL,
+            name VARCHAR(191) NOT NULL,
+            path VARCHAR(191) NOT NULL,
             method VARCHAR(10) NOT NULL,
             description TEXT,
             response_body LONGTEXT NOT NULL,
@@ -303,7 +303,7 @@ def init_database():
         CREATE TABLE IF NOT EXISTS generated_projects (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
-            project_name VARCHAR(255) NOT NULL,
+            project_name VARCHAR(191) NOT NULL,
             description TEXT,
             framework VARCHAR(50) NOT NULL,
             prompt TEXT,
@@ -323,7 +323,7 @@ def init_database():
         CREATE TABLE IF NOT EXISTS cookie_consents (
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NULL,
-            session_id VARCHAR(255) NULL,
+            session_id VARCHAR(191) NULL,
             necessary BOOLEAN DEFAULT TRUE,
             analytics BOOLEAN DEFAULT FALSE,
             marketing BOOLEAN DEFAULT FALSE,
