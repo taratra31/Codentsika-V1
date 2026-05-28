@@ -209,7 +209,7 @@ def init_database():
             ip_address VARCHAR(45),
             user_agent TEXT,
             expires_at DATETIME NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             INDEX idx_session_token (session_token),
@@ -226,7 +226,7 @@ def init_database():
             token VARCHAR(255) NOT NULL,
             expires_at DATETIME NOT NULL,
             used BOOLEAN DEFAULT FALSE,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             INDEX idx_token (token),
             INDEX idx_email (email)
@@ -244,7 +244,7 @@ def init_database():
             last_used DATETIME,
             expires_at DATETIME,
             is_active BOOLEAN DEFAULT TRUE,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             INDEX idx_api_key (api_key)
@@ -258,7 +258,7 @@ def init_database():
             id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
             title VARCHAR(255) NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             INDEX idx_user_id (user_id)
@@ -274,7 +274,7 @@ def init_database():
             role ENUM('user', 'assistant') NOT NULL,
             content LONGTEXT NOT NULL,
             image_url LONGTEXT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
             INDEX idx_conversation_id (conversation_id)
@@ -291,7 +291,7 @@ def init_database():
             method VARCHAR(10) NOT NULL,
             description TEXT,
             response_body LONGTEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             UNIQUE KEY unique_path_method (path, method)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -309,7 +309,7 @@ def init_database():
             prompt TEXT,
             files_count INT DEFAULT 0,
             files_data LONGTEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             INDEX idx_user_id (user_id),
@@ -331,7 +331,7 @@ def init_database():
             consent_status VARCHAR(50) NOT NULL,
             user_agent TEXT NULL,
             ip_address VARCHAR(45) NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             INDEX idx_user_id (user_id),
