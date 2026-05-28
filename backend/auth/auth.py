@@ -637,7 +637,7 @@ async def logout(request: Request):
 
     return {"message": "Logged out successfully"}
 
-@app.get("/api/health")
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 async def health_check():
     """Vérifie la connexion à la base de données"""
     try:
