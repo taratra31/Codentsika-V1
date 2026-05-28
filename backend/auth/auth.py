@@ -165,209 +165,33 @@ async def hourly_api_generator_loop():
             print(f"Error in background mock api loop execution: {e}")
 
 def init_database():
-    """Initialise les tables si elles n'existent pas"""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    # Création table users (MISY EMAIL PROVIDER)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(191) NOT NULL UNIQUE,
-            name VARCHAR(191),
-            provider ENUM('google', 'github', 'email') NOT NULL,
-            provider_id VARCHAR(191),
-            password_hash VARCHAR(191) NULL,
-            avatar_url TEXT,
-            role ENUM('user', 'admin') DEFAULT 'user',
-            plan VARCHAR(50) DEFAULT 'Gratuit',
-            is_active BOOLEAN DEFAULT TRUE,
-            last_login DATETIME,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            INDEX idx_email (email),
-            INDEX idx_provider (provider),
-            INDEX idx_provider_id (provider_id)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    # Vider les résultats non lus
-    cursor.fetchall()
-
-    # Ajouter la colonne plan si elle n'existe pas pour les bases existantes
-    try:
-        cursor.execute("ALTER TABLE users ADD COLUMN plan VARCHAR(50) DEFAULT 'Gratuit'")
-        cursor.fetchall()
-    except Exception:
-        pass
-
-    # Création table sessions
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS user_sessions (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            session_token VARCHAR(191) NOT NULL UNIQUE,
-            ip_address VARCHAR(45),
-            user_agent TEXT,
-            expires_at DATETIME NOT NULL,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            INDEX idx_session_token (session_token),
-            INDEX idx_expires_at (expires_at)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table password_resets
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS password_resets (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(191) NOT NULL,
-            token VARCHAR(191) NOT NULL,
-            expires_at DATETIME NOT NULL,
-            used BOOLEAN DEFAULT FALSE,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            INDEX idx_token (token),
-            INDEX idx_email (email)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table api_keys (optionnel)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS api_keys (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            api_key VARCHAR(64) NOT NULL UNIQUE,
-            name VARCHAR(191),
-            last_used DATETIME,
-            expires_at DATETIME,
-            is_active BOOLEAN DEFAULT TRUE,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            INDEX idx_api_key (api_key)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table conversations
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS conversations (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            title VARCHAR(191) NOT NULL,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            INDEX idx_user_id (user_id)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table messages
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS messages (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            conversation_id INT NOT NULL,
-            role ENUM('user', 'assistant') NOT NULL,
-            content LONGTEXT NOT NULL,
-            image_url LONGTEXT NULL,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
-            INDEX idx_conversation_id (conversation_id)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table mock_apis
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS mock_apis (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(191) NOT NULL,
-            path VARCHAR(191) NOT NULL,
-            method VARCHAR(10) NOT NULL,
-            description TEXT,
-            response_body LONGTEXT NOT NULL,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            UNIQUE KEY unique_path_method (path, method)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table generated_projects
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS generated_projects (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            project_name VARCHAR(191) NOT NULL,
-            description TEXT,
-            framework VARCHAR(50) NOT NULL,
-            prompt TEXT,
-            files_count INT DEFAULT 0,
-            files_data LONGTEXT,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            INDEX idx_user_id (user_id),
-            INDEX idx_created_at (created_at)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    # Création table cookie_consents
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS cookie_consents (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NULL,
-            session_id VARCHAR(191) NULL,
-            necessary BOOLEAN DEFAULT TRUE,
-            analytics BOOLEAN DEFAULT FALSE,
-            marketing BOOLEAN DEFAULT FALSE,
-            preferences BOOLEAN DEFAULT FALSE,
-            consent_status VARCHAR(50) NOT NULL,
-            user_agent TEXT NULL,
-            ip_address VARCHAR(45) NULL,
-            created_at DATETIME NULL,
-            updated_at DATETIME NULL,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            INDEX idx_user_id (user_id),
-            INDEX idx_session_id (session_id)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-    """)
-    cursor.fetchall()
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
     print("✅ Database initialized successfully")
-
 def save_or_update_user(email: str, name: str, provider: str, provider_id: str = None, avatar_url: str = None):
+    """Sauvegarde ou met à jour l'utilisateur dans la base"""
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    # Vérifier si l'utilisateur existe déjà
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
 
     now = datetime.now()
 
     if user:
-        cursor.execute("""
-            UPDATE users 
-            SET provider = %s,
-                provider_id = %s,
-                name = %s,
-                avatar_url = %s,
-                last_login = %s,
-                updated_at = %s
-            WHERE email = %s
-        """, (provider, provider_id, name, avatar_url, now, now, email))
-        user_id = user["id"]
+        # Vérifier si le provider est différent
+        if user['provider'] != provider:
+            cursor.close()
+            conn.close()
+            raise Exception(f"Email already registered with {user['provider']}")
+
+        # Mettre à jour last_login
+        cursor.execute(
+            "UPDATE users SET last_login = %s, updated_at = %s WHERE email = %s",
+            (now, now, email)
+        )
+        user_id = user['id']
     else:
+        # Créer nouvel utilisateur
         cursor.execute("""
             INSERT INTO users (email, name, provider, provider_id, avatar_url, last_login, created_at, updated_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
@@ -420,7 +244,6 @@ def get_user_by_session(session_token: str):
     return user
 
 # ---------- FASTAPI APP ----------
-
 app = FastAPI(title="Codentsika Auth API", version="1.0.0")
 
 # Middlewares
@@ -429,6 +252,7 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        FRONTEND_URL,
         "https://codentsikav1.andriamtaratra5.workers.dev",
         "http://localhost:5173",
         "http://localhost:3000",
@@ -467,6 +291,7 @@ oauth.register(
 @app.on_event("startup")
 async def startup_event():
     init_database()
+    asyncio.create_task(hourly_api_generator_loop())
     print("🚀 Codentsika Auth API is running!")
     print(f"📍 Frontend URL: {FRONTEND_URL}")
     print(f"🗄️  Database: {MYSQL_CONFIG['database']} on {MYSQL_CONFIG['host']}")
@@ -637,7 +462,7 @@ async def logout(request: Request):
 
     return {"message": "Logged out successfully"}
 
-@app.api_route("/api/health", methods=["GET", "HEAD"])
+@app.get("/api/health")
 async def health_check():
     """Vérifie la connexion à la base de données"""
     try:
