@@ -183,7 +183,7 @@ def init_database():
             plan VARCHAR(50) DEFAULT 'Gratuit',
             is_active BOOLEAN DEFAULT TRUE,
             last_login DATETIME,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME NULL,
             updated_at DATETIME NULL,
             INDEX idx_email (email),
             INDEX idx_provider (provider),
