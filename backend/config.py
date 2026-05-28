@@ -50,7 +50,7 @@ class Config:
             "password": self.MYSQL_PASSWORD,
             "database": self.MYSQL_DATABASE,
             "pool_name": "mypool",
-            "pool_size": 10,
+            "pool_size": 1,
         }
 
 config = Config()
