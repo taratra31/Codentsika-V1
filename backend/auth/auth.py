@@ -462,7 +462,6 @@ oauth.register(
 @app.on_event("startup")
 async def startup_event():
     init_database()
-    asyncio.create_task(hourly_api_generator_loop())
     print("🚀 Codentsika Auth API is running!")
     print(f"📍 Frontend URL: {FRONTEND_URL}")
     print(f"🗄️  Database: {MYSQL_CONFIG['database']} on {MYSQL_CONFIG['host']}")
